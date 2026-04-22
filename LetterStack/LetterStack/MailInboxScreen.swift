@@ -123,9 +123,7 @@ struct MailInboxScreen: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
 
-                // Full-screen centred empty state (matches reference:
-                // two lines + sun, SF Pro 15, not confined to the
-                // card slot).
+                // Full-screen centred empty state: sun, two caption lines, 15pt.
                 if letters.isEmpty {
                     ZStack {
                         Color.clear
@@ -136,12 +134,12 @@ struct MailInboxScreen: View {
                         VStack(alignment: .center, spacing: 0) {
                             Text("☀️")
                                 .font(.system(size: 23))
-                            Text("Looks like your")
+                            Text("Great start")
                                 .font(.system(size: 15, weight: .medium,
                                               design: .default))
                                 .foregroundStyle(emptyCaptionGray)
                                 .padding(.top, 8)
-                            Text("day is sorted")
+                            Text("to your day!")
                                 .font(.system(size: 15, weight: .medium,
                                               design: .default))
                                 .foregroundStyle(emptyCaptionGray)
@@ -332,6 +330,7 @@ struct MailInboxScreen: View {
                         fingerLocal: isTop ? fingerOnCard : nil,
                         lockedCurlCorner: isTop ? lockedCurlCorner : nil,
                         stackIndexFromTop: iFromTop,
+                        stackCount: letters.count,
                         cardLayoutSize: cardSize,
                         fadeProgress: cardFade,
                         drawsOutsideShadow: false
@@ -386,6 +385,7 @@ struct MailInboxScreen: View {
     @ViewBuilder
     private func outsideShadowLayer(cardSize: CGSize,
                                     topCurl: PageCurlGeometry) -> some View {
+        let stackDepthScale: Double = letters.count > 1 ? 1.14 : 1.0
         ZStack {
             ForEach(Array(letters.enumerated()), id: \.element.id) { index, letter in
                 let iFromTop = index
@@ -401,7 +401,8 @@ struct MailInboxScreen: View {
                     // so the outer rim shadow doesn't paint behind the
                     // lifted flap.  Lower sheets don't need this — the
                     // stack-level mask handles the pocket for them.
-                    curlPunchOut: (isTop && topCurl.isActive) ? topCurl : nil
+                    curlPunchOut: (isTop && topCurl.isActive) ? topCurl : nil,
+                    opacityScale: stackDepthScale
                 )
                 .frame(width: cardSize.width, height: cardSize.height)
                 .rotationEffect(.degrees(rotation + (isTop ? Double(drag.width) * 0.03 : 0)))
@@ -539,6 +540,7 @@ struct MailInboxScreen: View {
             fingerLocal: nil,
             lockedCurlCorner: nil,
             stackIndexFromTop: 0,
+            stackCount: 1,
             cardLayoutSize: cardSize,
             fadeProgress: 0
         )
@@ -1157,6 +1159,9 @@ private struct UndoReentryView: View {
                 y: reentry.fromBackOffset.height * t
             )
             .opacity(0.1 + 0.9 * p)
+            // Isolated in flight = full-rect drop shadow (strong read).  In the
+            // stack we avoid `.shadow` on the card to prevent bleed through
+            // the curl; depth there comes from `LetterCardOutsideShadow` + shade.
             .shadow(color: .black.opacity(0.10), radius: 8, x: 0, y: 3)
     }
 

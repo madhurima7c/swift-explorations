@@ -363,6 +363,9 @@ struct PageCurlView: View {
             highlightLayer
                 .clipShape(CardOuterShape(cornerRadius: curl.cornerRadius))
         }
+        // Contain all curl art (inkl. crease softening) to the card rect so
+        // contact shadow cannot spill onto the background / transparency.
+        .clipShape(RoundedRectangle(cornerRadius: curl.cornerRadius, style: .continuous))
         .allowsHitTesting(false)
     }
 
@@ -377,26 +380,28 @@ struct PageCurlView: View {
                 p.addQuadCurve(to: curl.pB, control: curl.foldControl)
                 return p
             }()
+            // Soft contact = stroked in Canvas (no `View.blur` → no bleed off sheet).
             Canvas { ctx, _ in
-                ctx.stroke(
-                    fold,
-                    with: .color(.black.opacity(0.22)),
-                    lineWidth: 1.2
-                )
+                for (op, w) in [(0.10, 3.0), (0.07, 1.0)] {
+                    ctx.stroke(
+                        fold,
+                        with: .color(.black.opacity(op)),
+                        lineWidth: w
+                    )
+                }
             }
-            .frame(width: curl.cardSize.width, height: curl.cardSize.height)
-            .blur(radius: 4.5)
+            .frame(width: curl.cardSize.width, height: curl.cardSize.height, alignment: .topLeading)
             .blendMode(.multiply)
+            // Only the pocket “floor” (flap minus lifted back), not the whole card face.
             .mask(
                 ZStack(alignment: .topLeading) {
-                    Color.black
+                    curl.flapPath.fill(Color.black)
                     curl.mirrorPath
                         .fill(Color.black)
                         .blendMode(.destinationOut)
                 }
                 .compositingGroup()
             )
-            .clipShape(CardOuterShape(cornerRadius: curl.cornerRadius))
         }
     }
 
@@ -515,20 +520,22 @@ struct PageCurlView: View {
                     p.move(to: curl.pA)
                     p.addQuadCurve(to: curl.pB, control: curl.foldControl)
                 }
+                // Ridge highlight — a touch brighter; butt caps to avoid nubs at card edges.
                 ctx.stroke(
                     fold,
                     with: .linearGradient(
                         Gradient(stops: [
                             .init(color: .clear,                location: 0.00),
-                            .init(color: .white.opacity(0.50), location: 0.50),
+                            .init(color: .white.opacity(0.58), location: 0.50),
                             .init(color: .clear,                location: 1.00),
                         ]),
                         startPoint: curl.pA,
                         endPoint:   curl.pB
                     ),
-                    style: StrokeStyle(lineWidth: 1.6, lineCap: .round)
+                    style: StrokeStyle(lineWidth: 1.5, lineCap: .butt, lineJoin: .round)
                 )
             }
+            .frame(width: curl.cardSize.width, height: curl.cardSize.height, alignment: .topLeading)
         }
     }
 }

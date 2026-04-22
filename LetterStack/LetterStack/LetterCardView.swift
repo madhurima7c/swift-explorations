@@ -157,21 +157,24 @@ struct LetterCardOutsideShadow: View {
     /// is punched out of the shadow mask so the **perimeter** shadow ring
     /// cannot bleed into the lifted corner like a grey slab.
     var curlPunchOut: PageCurlGeometry?
+    /// >1 when 2+ letters are stacked (see `LetterCardView.stackCount`).
+    var opacityScale: Double = 1.0
 
     var body: some View {
+        let s = min(opacityScale, 1.25)
         ZStack(alignment: .topLeading) {
             layer(
-                opacity: MailDesign.cardOutsideShadowTightOpacity,
+                opacity: MailDesign.cardOutsideShadowTightOpacity * s,
                 blur: MailDesign.cardOutsideShadowTightBlur,
                 offsetY: MailDesign.cardOutsideShadowTightY
             )
             layer(
-                opacity: MailDesign.cardOutsideShadowMidOpacity,
+                opacity: MailDesign.cardOutsideShadowMidOpacity * s,
                 blur: MailDesign.cardOutsideShadowMidBlur,
                 offsetY: MailDesign.cardOutsideShadowMidY
             )
             layer(
-                opacity: MailDesign.cardOutsideShadowSoftOpacity,
+                opacity: MailDesign.cardOutsideShadowSoftOpacity * s,
                 blur: MailDesign.cardOutsideShadowSoftBlur,
                 offsetY: MailDesign.cardOutsideShadowSoftY
             )
@@ -202,11 +205,17 @@ struct LetterCardOutsideShadow: View {
                 .blendMode(.destinationOut)
 
             if let c = curlPunchOut, c.isActive {
-                // Blurred fill of pocket ∪ flap — soft-erase perimeter shadow in
-                // the curl region without strokedPath (avoids fold-line artefacts).
+                // Blurred `destinationOut` punch must not be **layout-clipped** to
+                // the card rect before the blur: that truncates the feather at
+                // the top/edge (esp. top-left curl) and can leave a vertical
+                // band of **leftover ring mask** in the sky — a “mystery shadow”.
+                // Padding → blur → padding gives the filter room (standard SwiftUI).
+                let b = MailDesign.cardShadowCurlPunchBlur
                 c.curlShadowExclusionPath(in: layoutRect)
                     .fill(Color.black)
-                    .blur(radius: MailDesign.cardShadowCurlPunchBlur)
+                    .padding(-b)
+                    .blur(radius: b)
+                    .padding(b)
                     .blendMode(.destinationOut)
             }
         }
@@ -215,10 +224,51 @@ struct LetterCardOutsideShadow: View {
     }
 }
 
+// MARK: - Subtle “desk lamp” on the face (stops the sheet reading as a flat swatch)
+
+private struct PaperFaceLighting: View {
+    let cornerRadius: CGFloat
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            .fill(
+                LinearGradient(
+                    stops: [
+                        .init(color: Color.white.opacity(0.34), location: 0.0),
+                        .init(color: Color.white.opacity(0.08), location: 0.22),
+                        .init(color: .clear, location: 0.5),
+                        .init(color: Color.black.opacity(0.028), location: 1.0)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .blendMode(.softLight)
+            .overlay {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .strokeBorder(
+                        LinearGradient(
+                            stops: [
+                                .init(color: .white.opacity(0.5), location: 0.0),
+                                .init(color: .clear, location: 0.5),
+                                .init(color: .black.opacity(0.04), location: 1.0)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 0.5
+                    )
+            }
+            .allowsHitTesting(false)
+    }
+}
+
 // MARK: - Contact shade from the sheet above (stack depth)
 
 private struct StackUpperSheetShade: View {
     let cornerRadius: CGFloat
+    /// Slightly >1 when several sheets are visible so the step reads.
+    var strength: CGFloat = 1.0
 
     var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
@@ -227,8 +277,8 @@ private struct StackUpperSheetShade: View {
                 // higher sheet actually rests, not a broad wash over the page.
                 RadialGradient(
                     stops: [
-                        .init(color: .black.opacity(0.05), location: 0),
-                        .init(color: .black.opacity(0.02), location: 0.22),
+                        .init(color: .black.opacity(0.05 * strength), location: 0),
+                        .init(color: .black.opacity(0.02 * strength), location: 0.22),
                         .init(color: .clear, location: 1)
                     ],
                     center: .top,
@@ -252,6 +302,8 @@ struct LetterCardView: View {
     /// drag so the curl never flips sides mid-gesture.
     var lockedCurlCorner: CurlCorner?
     var stackIndexFromTop: Int
+    /// Inbox’s current letter count — used to add depth when 2+ sheets overlap.
+    var stackCount: Int = 1
     var cardLayoutSize: CGSize
     var fadeProgress: CGFloat = 0
     /// When false, the outside stack shadow is omitted so the parent
@@ -259,6 +311,14 @@ struct LetterCardView: View {
     /// Necessary to punch the top sheet's curl pocket out of lower
     /// sheets' shadows without also erasing their bodies.
     var drawsOutsideShadow: Bool = true
+
+    private var stackDepthScale: Double {
+        stackCount > 1 ? 1.14 : 1.0
+    }
+
+    private var upperSheetShadeStrength: CGFloat {
+        stackCount > 1 && stackIndexFromTop > 0 ? 1.22 : 1.0
+    }
 
     /// The curl is only active on the top card while a finger is down.
     private var curl: PageCurlGeometry {
@@ -306,7 +366,8 @@ struct LetterCardView: View {
                 LetterCardOutsideShadow(
                     size: cardLayoutSize,
                     cornerRadius: cornerRadius,
-                    curlPunchOut: (stackIndexFromTop == 0 && curl.isActive) ? curl : nil
+                    curlPunchOut: (stackIndexFromTop == 0 && curl.isActive) ? curl : nil,
+                    opacityScale: stackDepthScale
                 )
             }
 
@@ -315,14 +376,21 @@ struct LetterCardView: View {
             bodyShape
                 .fill(MailDesign.paper)
 
+            PaperFaceLighting(cornerRadius: cornerRadius)
+                .clipShape(bodyShape)
+                .allowsHitTesting(false)
+
             PaperTexture(vignette: true)
                 .clipShape(bodyShape)
                 .allowsHitTesting(false)
 
             if stackIndexFromTop > 0 {
-                StackUpperSheetShade(cornerRadius: cornerRadius)
-                    .clipShape(bodyShape)
-                    .allowsHitTesting(false)
+                StackUpperSheetShade(
+                    cornerRadius: cornerRadius,
+                    strength: upperSheetShadeStrength
+                )
+                .clipShape(bodyShape)
+                .allowsHitTesting(false)
             }
 
             // Hairline outline — applied to EVERY card so the stack

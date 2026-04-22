@@ -4,11 +4,9 @@ import SwiftUI
 //
 // Crisp white pill with a bright inner rim for depth.
 //
-//   • Body             : pure white @ 80 %.  Translucent enough that
-//                        whatever is behind still reads through softly,
-//                        but never reads as grey (which is what happens
-//                        when you stack translucent material + a white
-//                        tint on a light background).
+//   • Body             : near-white on top of ultra-thin material so the
+//                        pill reads crisp on the sky (higher = less “grey
+//                        pill” in screenshots).
 //   • Inner rim        : white @ 95 %, 0.75 pt — adds a specular edge
 //                        that gives the pill its glass depth without
 //                        any gradient.
@@ -42,12 +40,12 @@ private struct PillChrome: View {
             // translucent window.
             shape
                 .fill(.ultraThinMaterial)
-                .overlay(shape.fill(Color.white.opacity(0.82)))
+                .overlay(shape.fill(Color.white.opacity(0.92)))
                 .overlay(
                     // Bright inner rim — glassy depth.
                     shape
                         .inset(by: 0.5)
-                        .stroke(Color.white.opacity(0.95), lineWidth: 0.75)
+                        .stroke(Color.white.opacity(0.98), lineWidth: 0.75)
                 )
                 .overlay(
                     // Whisper-soft outer hairline to define the edge.
@@ -254,7 +252,7 @@ struct IconOnlyPill: View {
         .animation(.easeOut(duration: 0.12), value: isPressed)
         .contentShape(RoundedRectangle(cornerRadius: PillMetrics.corner,
                                        style: .continuous))
-        .opacity(isActive ? 1 : 0.96)
+        .opacity(isActive ? 1 : 0.99)
         .gesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in if !isPressed { isPressed = true } }
