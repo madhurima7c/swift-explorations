@@ -1,0 +1,395 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0C8AF69A08B84E8CB6F5F1BE5EEA83A2 /* ActionPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C098F69381421FB28C85F3046D96FC /* ActionPill.swift */; };
+		3C63FED46AEF4CE88E8F8551F73612F0 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA2F3D062BFB4ED892251D7A885F3189 /* DesignSystem.swift */; };
+		47250049E7AF45D1BD60321F5BAB1272 /* LetterCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DDD5FA896B4D72B65951687D270F9C /* LetterCardView.swift */; };
+		67D4DE1ED1364713A5F2B255A91AE358 /* MailInboxScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7F0C7ED2FF4E9892A25B9E7F7B0472 /* MailInboxScreen.swift */; };
+		AA0100100000000000000001 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0100000000000000000001 /* Haptics.swift */; };
+		AA0100100000000000000002 /* FingerFoldCurl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0100000000000000000002 /* FingerFoldCurl.swift */; };
+		AA0100100000000000000003 /* PaperSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0100000000000000000003 /* PaperSound.swift */; };
+		AA0100100000000000000004 /* CrumplingImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0100000000000000000004 /* CrumplingImage.swift */; };
+		AA0100100000000000000005 /* Paper3DCrumpleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0100000000000000000005 /* Paper3DCrumpleView.swift */; };
+		AA0200100000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000000001 /* Assets.xcassets */; };
+		AA0300100000000000000001 /* Bogart-Regular-trial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA0300000000000000000001 /* Bogart-Regular-trial.ttf */; };
+		AA0300100000000000000002 /* Bogart-Medium-trial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA0300000000000000000002 /* Bogart-Medium-trial.ttf */; };
+		AA0300100000000000000003 /* Bogart-Semibold-trial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA0300000000000000000003 /* Bogart-Semibold-trial.ttf */; };
+		AA0300100000000000000004 /* Bogart-Bold-trial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA0300000000000000000004 /* Bogart-Bold-trial.ttf */; };
+		AA0300100000000000000005 /* Bogart-Italic-trial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA0300000000000000000005 /* Bogart-Italic-trial.ttf */; };
+		C9DAA4E018EF4E25BB331F13EF02C38A /* LetterStackApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B158A281A88046E8B1288143A9A8383E /* LetterStackApp.swift */; };
+		EEA1B0C1C2154614B55A2195BB427DEA /* LetterModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE001EBC2154614B55A2195BB427DEA /* LetterModels.swift */; };
+		F1E2D3C4000010000000A02 /* LetterTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4000010000000A01 /* LetterTypography.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		4FE001EBC2154614B55A2195BB427DEA /* LetterModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterModels.swift; sourceTree = "<group>"; };
+		92C098F69381421FB28C85F3046D96FC /* ActionPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionPill.swift; sourceTree = "<group>"; };
+		AA0100000000000000000001 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		AA0100000000000000000002 /* FingerFoldCurl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FingerFoldCurl.swift; sourceTree = "<group>"; };
+		AA0100000000000000000003 /* PaperSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaperSound.swift; sourceTree = "<group>"; };
+		AA0100000000000000000004 /* CrumplingImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrumplingImage.swift; sourceTree = "<group>"; };
+		AA0100000000000000000005 /* Paper3DCrumpleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paper3DCrumpleView.swift; sourceTree = "<group>"; };
+		AA0200000000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AA0300000000000000000001 /* Bogart-Regular-trial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Bogart-Regular-trial.ttf"; path = "Resources/Fonts/Bogart-Regular-trial.ttf"; sourceTree = "<group>"; };
+		AA0300000000000000000002 /* Bogart-Medium-trial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Bogart-Medium-trial.ttf"; path = "Resources/Fonts/Bogart-Medium-trial.ttf"; sourceTree = "<group>"; };
+		AA0300000000000000000003 /* Bogart-Semibold-trial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Bogart-Semibold-trial.ttf"; path = "Resources/Fonts/Bogart-Semibold-trial.ttf"; sourceTree = "<group>"; };
+		AA0300000000000000000004 /* Bogart-Bold-trial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Bogart-Bold-trial.ttf"; path = "Resources/Fonts/Bogart-Bold-trial.ttf"; sourceTree = "<group>"; };
+		AA0300000000000000000005 /* Bogart-Italic-trial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Bogart-Italic-trial.ttf"; path = "Resources/Fonts/Bogart-Italic-trial.ttf"; sourceTree = "<group>"; };
+		B158A281A88046E8B1288143A9A8383E /* LetterStackApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterStackApp.swift; sourceTree = "<group>"; };
+		E146AC7735AA4A689DB526827151794E /* LetterStack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LetterStack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8DDD5FA896B4D72B65951687D270F9C /* LetterCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterCardView.swift; sourceTree = "<group>"; };
+		EA2F3D062BFB4ED892251D7A885F3189 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		EF7F0C7ED2FF4E9892A25B9E7F7B0472 /* MailInboxScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailInboxScreen.swift; sourceTree = "<group>"; };
+		F1E2D3C4000010000000A01 /* LetterTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterTypography.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FD1C0F6666F144C3851B0CF2168CA04A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		55711B306D3F43B9AC45F92B05310520 /* LetterStack */ = {
+			isa = PBXGroup;
+			children = (
+				B158A281A88046E8B1288143A9A8383E /* LetterStackApp.swift */,
+				EF7F0C7ED2FF4E9892A25B9E7F7B0472 /* MailInboxScreen.swift */,
+				E8DDD5FA896B4D72B65951687D270F9C /* LetterCardView.swift */,
+				92C098F69381421FB28C85F3046D96FC /* ActionPill.swift */,
+				EA2F3D062BFB4ED892251D7A885F3189 /* DesignSystem.swift */,
+				4FE001EBC2154614B55A2195BB427DEA /* LetterModels.swift */,
+				F1E2D3C4000010000000A01 /* LetterTypography.swift */,
+				AA0100000000000000000001 /* Haptics.swift */,
+				AA0100000000000000000002 /* FingerFoldCurl.swift */,
+				AA0100000000000000000003 /* PaperSound.swift */,
+				AA0100000000000000000004 /* CrumplingImage.swift */,
+				AA0100000000000000000005 /* Paper3DCrumpleView.swift */,
+				AA0200000000000000000001 /* Assets.xcassets */,
+				AA0300000000000000000001 /* Bogart-Regular-trial.ttf */,
+				AA0300000000000000000002 /* Bogart-Medium-trial.ttf */,
+				AA0300000000000000000003 /* Bogart-Semibold-trial.ttf */,
+				AA0300000000000000000004 /* Bogart-Bold-trial.ttf */,
+				AA0300000000000000000005 /* Bogart-Italic-trial.ttf */,
+			);
+			path = LetterStack;
+			sourceTree = "<group>";
+		};
+		67A8A897DFAB461ABD5B5C5C7C128D6E = {
+			isa = PBXGroup;
+			children = (
+				55711B306D3F43B9AC45F92B05310520 /* LetterStack */,
+				FADE8CB3E12342B09415EC6E7BC3AE9E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FADE8CB3E12342B09415EC6E7BC3AE9E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E146AC7735AA4A689DB526827151794E /* LetterStack.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E146AC7735AA4A689DB526827151794F /* LetterStack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F895EA26C2F8499C94D8D8E5DD0B0CEA /* Build configuration list for PBXNativeTarget "LetterStack" */;
+			buildPhases = (
+				4C5219C94EAD471B9E1182628DDA601C /* Sources */,
+				FD1C0F6666F144C3851B0CF2168CA04A /* Frameworks */,
+				166BC7EEE52D4F65AA2E78615CBA0BD1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LetterStack;
+			productName = LetterStack;
+			productReference = E146AC7735AA4A689DB526827151794E /* LetterStack.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DC8C52993B074B3AA53796777BED5639 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					E146AC7735AA4A689DB526827151794F = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 6C3577F9C79A4AE793B9A5ECBC789F4F /* Build configuration list for PBXProject "LetterStack" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 67A8A897DFAB461ABD5B5C5C7C128D6E;
+			productRefGroup = FADE8CB3E12342B09415EC6E7BC3AE9E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E146AC7735AA4A689DB526827151794F /* LetterStack */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		166BC7EEE52D4F65AA2E78615CBA0BD1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA0200100000000000000001 /* Assets.xcassets in Resources */,
+				AA0300100000000000000001 /* Bogart-Regular-trial.ttf in Resources */,
+				AA0300100000000000000002 /* Bogart-Medium-trial.ttf in Resources */,
+				AA0300100000000000000003 /* Bogart-Semibold-trial.ttf in Resources */,
+				AA0300100000000000000004 /* Bogart-Bold-trial.ttf in Resources */,
+				AA0300100000000000000005 /* Bogart-Italic-trial.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C5219C94EAD471B9E1182628DDA601C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9DAA4E018EF4E25BB331F13EF02C38A /* LetterStackApp.swift in Sources */,
+				67D4DE1ED1364713A5F2B255A91AE358 /* MailInboxScreen.swift in Sources */,
+				47250049E7AF45D1BD60321F5BAB1272 /* LetterCardView.swift in Sources */,
+				0C8AF69A08B84E8CB6F5F1BE5EEA83A2 /* ActionPill.swift in Sources */,
+				3C63FED46AEF4CE88E8F8551F73612F0 /* DesignSystem.swift in Sources */,
+				EEA1B0C1C2154614B55A2195BB427DEA /* LetterModels.swift in Sources */,
+				F1E2D3C4000010000000A02 /* LetterTypography.swift in Sources */,
+				AA0100100000000000000001 /* Haptics.swift in Sources */,
+				AA0100100000000000000002 /* FingerFoldCurl.swift in Sources */,
+				AA0100100000000000000003 /* PaperSound.swift in Sources */,
+				AA0100100000000000000004 /* CrumplingImage.swift in Sources */,
+				AA0100100000000000000005 /* Paper3DCrumpleView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2A1F0B2A2A1F0B2A2A1F0B2A2A1F0B2A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3B3C4D5E6F708192A3B4C5D6E7F8091A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A1B2C3D4E5F60718293A4B5C6D7E8F90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X342WVSJ3T;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = LetterStack;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.personalprojects.LetterStack;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		B2C3D4E5F60718293A4B5C6D7E8F901 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X342WVSJ3T;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = LetterStack;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.personalprojects.LetterStack;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6C3577F9C79A4AE793B9A5ECBC789F4F /* Build configuration list for PBXProject "LetterStack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A1F0B2A2A1F0B2A2A1F0B2A2A1F0B2A /* Debug */,
+				3B3C4D5E6F708192A3B4C5D6E7F8091A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F895EA26C2F8499C94D8D8E5DD0B0CEA /* Build configuration list for PBXNativeTarget "LetterStack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D4E5F60718293A4B5C6D7E8F90 /* Debug */,
+				B2C3D4E5F60718293A4B5C6D7E8F901 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DC8C52993B074B3AA53796777BED5639 /* Project object */;
+}
