@@ -247,10 +247,64 @@ struct MailInboxScreen: View {
 
     // MARK: - Stack
 
+    /// The top card's live curl geometry, derived from the same shared
+    /// drag / finger state that `LetterCardView` uses internally.
+    /// Computed here so the stack can punch the pocket out of every
+    /// card's shadow, not just the top sheet's.
+    private func topCardCurl(cardSize: CGSize) -> PageCurlGeometry {
+        let d = min(1, max(0, hypot(drag.width, drag.height) / 160))
+        let intensity: CGFloat = fingerOnCard == nil ? 0 : (0.42 + 0.58 * d)
+        return PageCurlGeometry(
+            origin: fingerOnCard,
+            lockedCorner: lockedCurlCorner,
+            cardSize: cardSize,
+            cornerRadius: MailDesign.cardCorner,
+            intensity: intensity
+        )
+    }
+
     private func letterStack(cardWidth: CGFloat,
                              cardHeight: CGFloat,
                              cardSize: CGSize) -> some View {
-        ZStack {
+        let topCurl = topCardCurl(cardSize: cardSize)
+        // Top card's visual transform — the mask has to follow the
+        // sheet as the user drags so the pocket cut-out stays aligned
+        // with the lifted corner.
+        let topRotation = stackRotation(for: 0) + Double(drag.width) * 0.03
+        let topOffset = CGSize(
+            width: stackOffset(for: 0).width + drag.width,
+            height: stackOffset(for: 0).height + drag.height
+        )
+
+        return ZStack {
+            // Every card's outside shadow, rendered together in one
+            // layer so a single mask can punch the top sheet's curl
+            // pocket out of *all* of them.  Without this, lower sheets'
+            // shadows bled through the hole and read as a grey patch
+            // behind the lifted corner.  Card bodies render in the
+            // layer below this one, unmasked — so the pocket still
+            // reveals the next sheet's paper wherever it reaches.
+            outsideShadowLayer(cardSize: cardSize, topCurl: topCurl)
+                .mask(
+                    ZStack {
+                        Rectangle()
+                            .fill(Color.black)
+                            .frame(width: cardSize.width + 240,
+                                   height: cardSize.height + 240)
+
+                        if topCurl.isActive {
+                            CurlPocketShape(curl: topCurl)
+                                .fill(Color.black)
+                                .frame(width: cardSize.width,
+                                       height: cardSize.height)
+                                .rotationEffect(.degrees(topRotation))
+                                .offset(topOffset)
+                                .blendMode(.destinationOut)
+                        }
+                    }
+                    .compositingGroup()
+                )
+
             ForEach(Array(letters.enumerated()), id: \.element.id) { index, letter in
                 let iFromTop = index
                 let drawZ = Double(max(0, letters.count - 1 - index))
@@ -279,7 +333,8 @@ struct MailInboxScreen: View {
                         lockedCurlCorner: isTop ? lockedCurlCorner : nil,
                         stackIndexFromTop: iFromTop,
                         cardLayoutSize: cardSize,
-                        fadeProgress: cardFade
+                        fadeProgress: cardFade,
+                        drawsOutsideShadow: false
                     )
 
                     if crumpleActive {
@@ -322,10 +377,39 @@ struct MailInboxScreen: View {
                 .zIndex(-1)
             }
         }
-        // No `.compositingGroup().shadow()` here: the stack slot is a hard
-        // rectangle — that shadow’s inner falloff reads as a grey **box**
-        // through the curl hole. Depth comes from each card’s outside-only
-        // shadow + `StackUpperSheetShade` between sheets.
+    }
+
+    /// Renders every card's outside stack shadow in a single layer so
+    /// one mask can punch the top sheet's curl pocket out of all of
+    /// them together.  Each shadow still follows its own sheet's
+    /// rotation and offset so the stack silhouette reads correctly.
+    @ViewBuilder
+    private func outsideShadowLayer(cardSize: CGSize,
+                                    topCurl: PageCurlGeometry) -> some View {
+        ZStack {
+            ForEach(Array(letters.enumerated()), id: \.element.id) { index, letter in
+                let iFromTop = index
+                let drawZ = Double(max(0, letters.count - 1 - index))
+                let rotation = stackRotation(for: iFromTop)
+                let offset = stackOffset(for: iFromTop)
+                let isTop = iFromTop == 0
+
+                LetterCardOutsideShadow(
+                    size: cardSize,
+                    cornerRadius: MailDesign.cardCorner,
+                    // Top sheet still carries its own mirror-flap punch-out
+                    // so the outer rim shadow doesn't paint behind the
+                    // lifted flap.  Lower sheets don't need this — the
+                    // stack-level mask handles the pocket for them.
+                    curlPunchOut: (isTop && topCurl.isActive) ? topCurl : nil
+                )
+                .frame(width: cardSize.width, height: cardSize.height)
+                .rotationEffect(.degrees(rotation + (isTop ? Double(drag.width) * 0.03 : 0)))
+                .offset(x: offset.width + (isTop ? drag.width : 0),
+                        y: offset.height + (isTop ? drag.height : 0))
+                .zIndex(drawZ)
+            }
+        }
     }
 
     private func stackRotation(for indexFromTop: Int) -> Double {

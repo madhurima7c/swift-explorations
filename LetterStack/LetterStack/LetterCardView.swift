@@ -146,7 +146,11 @@ private struct SeededGenerator: RandomNumberGenerator {
 /// card silhouette — same idea as a contact shadow in design tools.
 /// Critical when `CardMinusCurlShape` cuts a hole: inner shadow spill
 /// cannot appear because we never draw shadow inside the rect at all.
-private struct LetterCardOutsideShadow: View {
+///
+/// Exposed (not private) so the stack can render every card's shadow in
+/// a single layer above, and apply one collective mask that punches the
+/// top sheet's curl pocket out of every lower sheet's shadow.
+struct LetterCardOutsideShadow: View {
     let size: CGSize
     let cornerRadius: CGFloat
     /// When set and active, the pocket under the curl (plus a blur halo)
@@ -250,6 +254,11 @@ struct LetterCardView: View {
     var stackIndexFromTop: Int
     var cardLayoutSize: CGSize
     var fadeProgress: CGFloat = 0
+    /// When false, the outside stack shadow is omitted so the parent
+    /// can render every card's shadow together in one masked layer.
+    /// Necessary to punch the top sheet's curl pocket out of lower
+    /// sheets' shadows without also erasing their bodies.
+    var drawsOutsideShadow: Bool = true
 
     /// The curl is only active on the top card while a finger is down.
     private var curl: PageCurlGeometry {
@@ -291,11 +300,15 @@ struct LetterCardView: View {
             // Outside-only shadow — never paints inside the card rect. When a
             // curl is active, we also punch pocket ∪ flap (blurred) out of the
             // mask so the edge shadow ring cannot bleed behind the fold.
-            LetterCardOutsideShadow(
-                size: cardLayoutSize,
-                cornerRadius: cornerRadius,
-                curlPunchOut: (stackIndexFromTop == 0 && curl.isActive) ? curl : nil
-            )
+            // Skipped when the parent is rendering shadows itself in a
+            // separately-masked layer (see `MailInboxScreen.outsideShadowLayer`).
+            if drawsOutsideShadow {
+                LetterCardOutsideShadow(
+                    size: cardLayoutSize,
+                    cornerRadius: cornerRadius,
+                    curlPunchOut: (stackIndexFromTop == 0 && curl.isActive) ? curl : nil
+                )
+            }
 
             // The actual paper body — cut by the flap, TRULY transparent
             // where the curl lifts so the next card shows through.
