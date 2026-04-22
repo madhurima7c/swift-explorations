@@ -33,7 +33,7 @@ struct PaperTexture: View {
                 endPoint: .bottomTrailing
             )
             .blendMode(.softLight)
-            .opacity(0.55)
+            .opacity(0.60)
 
             // Horizontal linen grain — primary fibre direction.
             Canvas { ctx, size in
@@ -113,10 +113,10 @@ struct PaperTexture: View {
             if vignette {
                 RadialGradient(
                     colors: [.clear,
-                             MailDesign.paperWarm.opacity(0.20)],
+                             MailDesign.paperWarm.opacity(0.24)],
                     center: .center,
-                    startRadius: m * 0.26,
-                    endRadius: m * 0.64
+                    startRadius: m * 0.24,
+                    endRadius: m * 0.66
                 )
                 .blendMode(.multiply)
                 .allowsHitTesting(false)
@@ -230,36 +230,71 @@ private struct PaperFaceLighting: View {
     let cornerRadius: CGFloat
 
     var body: some View {
-        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-            .fill(
-                LinearGradient(
-                    stops: [
-                        .init(color: Color.white.opacity(0.34), location: 0.0),
-                        .init(color: Color.white.opacity(0.08), location: 0.22),
-                        .init(color: .clear, location: 0.5),
-                        .init(color: Color.black.opacity(0.028), location: 1.0)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            .blendMode(.softLight)
-            .overlay {
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .strokeBorder(
-                        LinearGradient(
-                            stops: [
-                                .init(color: .white.opacity(0.5), location: 0.0),
-                                .init(color: .clear, location: 0.5),
-                                .init(color: .black.opacity(0.04), location: 1.0)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ),
-                        lineWidth: 0.5
+        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        // Layered, reference-style depth: one broad diagonal + a specular
+        // puddle (top-left) and a very soft far-corner falloff — all kept
+        // inside the card so we don’t add extra global shadows / mask risk.
+        return ZStack {
+            shape
+                .fill(
+                    LinearGradient(
+                        stops: [
+                            .init(color: Color.white.opacity(0.40), location: 0.0),
+                            .init(color: Color.white.opacity(0.11), location: 0.18),
+                            .init(color: .clear, location: 0.48),
+                            .init(color: Color.black.opacity(0.04), location: 1.0)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
                     )
-            }
-            .allowsHitTesting(false)
+                )
+                .blendMode(.softLight)
+            shape
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            Color.white.opacity(0.24),
+                            Color.white.opacity(0.06),
+                            .clear
+                        ],
+                        center: .topLeading,
+                        startRadius: 0,
+                        endRadius: 200
+                    )
+                )
+                .blendMode(.softLight)
+            shape
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            .clear,
+                            Color.black.opacity(0.05)
+                        ],
+                        center: .bottomTrailing,
+                        startRadius: 40,
+                        endRadius: 220
+                    )
+                )
+                .blendMode(.multiply)
+                .opacity(0.85)
+            shape
+                .overlay {
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .strokeBorder(
+                            LinearGradient(
+                                stops: [
+                                    .init(color: .white.opacity(0.55), location: 0.0),
+                                    .init(color: .clear, location: 0.5),
+                                    .init(color: .black.opacity(0.055), location: 1.0)
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ),
+                            lineWidth: 0.5
+                        )
+                }
+        }
+        .allowsHitTesting(false)
     }
 }
 

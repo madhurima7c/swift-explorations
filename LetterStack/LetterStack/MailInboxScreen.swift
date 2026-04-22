@@ -393,6 +393,15 @@ struct MailInboxScreen: View {
                 let rotation = stackRotation(for: iFromTop)
                 let offset = stackOffset(for: iFromTop)
                 let isTop = iFromTop == 0
+                // This layer must stay a rounded-rect *card* ring. During
+                // crumple the visible paper is a ball offset upward; during
+                // trash flight the stack card is empty.  Leaving the top ring
+                // here (Mark's single combined shadow pass) would read as a
+                // wrong grey L-fragment at the old slot, since it doesn't move
+                // with `PaperCrumple` and isn't a sphere-sized halo.
+                let hideTopStackRing: Bool = isTop
+                    && (isTrashing
+                        || (!isTrashing && trashHighlight > 0.02))
 
                 LetterCardOutsideShadow(
                     size: cardSize,
@@ -408,6 +417,7 @@ struct MailInboxScreen: View {
                 .rotationEffect(.degrees(rotation + (isTop ? Double(drag.width) * 0.03 : 0)))
                 .offset(x: offset.width + (isTop ? drag.width : 0),
                         y: offset.height + (isTop ? drag.height : 0))
+                .opacity(hideTopStackRing ? 0 : 1)
                 .zIndex(drawZ)
             }
         }
