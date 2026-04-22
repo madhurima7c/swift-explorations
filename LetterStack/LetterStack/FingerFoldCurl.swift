@@ -330,6 +330,17 @@ struct CardOuterShape: Shape {
     }
 }
 
+/// The curl's pocket — the region lifted off the card, expressed as a
+/// Shape so it can be used as a mask with layout-space transforms
+/// applied (rotation, offset) in the parent coordinate space.
+struct CurlPocketShape: Shape {
+    var curl: PageCurlGeometry
+    func path(in rect: CGRect) -> Path {
+        guard curl.isActive else { return Path() }
+        return curl.flapPath(in: rect)
+    }
+}
+
 // MARK: - Renderer
 
 struct PageCurlView: View {
