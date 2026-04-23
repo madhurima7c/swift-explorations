@@ -633,7 +633,7 @@ struct MailInboxScreen: View {
         guard let topLetter = letters.first else { return }
         isCompletingGesture = true
         Haptics.softTap()
-        PaperSound.shared.crumple(volume: 0.42)
+        PaperSound.shared.crumple(volume: 0.85)
 
         // Where the live-crumple overlay was when the user released.
         // We hand this to the flight view so it starts *at the same

@@ -1,16 +1,28 @@
 import AVFoundation
 
-/// Generates short paper sounds on the fly with filtered noise.
-/// We use `.playback` so the sounds play even when the phone's ring switch
-/// is on silent.
+/// Mail action SFX. Prefers bundled Freesound clips (see `SoundFiles`); if a
+/// file is missing, falls back to short procedural noise for that sound only.
+/// Session: `.playback` + `.mixWithOthers` so audio plays in silent mode.
 final class PaperSound {
     static let shared = PaperSound()
+
+    private enum SoundFiles {
+        /// Unread + Archive — paper rustle (`freesound_community-paper-rustle-81855`).
+        static let paperRustleBase = "freesound_community-paper-rustle-81855"
+        /// Trash — trash-can lid (`…dropping-trash-can-lid_zoomh2nxywav-87291`).
+        static let trashLidBase =
+            "freesound_community-075652_20131202_dropping-trash-can-lid_zoomh2nxywav-87291"
+        /// Prefer your real `.mp3` in the app target; same basename as the download.
+        static let tryExtensions = ["mp3", "m4a", "aac", "wav", "caf"]
+    }
 
     private let engine = AVAudioEngine()
     private let rustleNode = AVAudioPlayerNode()
     private let crumpleNode = AVAudioPlayerNode()
     private var rustleBuffer: AVAudioPCMBuffer?
     private var crumpleBuffer: AVAudioPCMBuffer?
+    private var rustleFile: AVAudioPlayer?
+    private var trashLidFile: AVAudioPlayer?
     private var isConfigured = false
 
     private init() {
@@ -24,15 +36,15 @@ final class PaperSound {
 
     func activate() {
         guard !isConfigured else {
-            if !engine.isRunning { try? engine.start() }
+            if !engine.isRunning, rustleBuffer != nil || crumpleBuffer != nil {
+                try? engine.start()
+            }
             return
         }
         isConfigured = true
 
         do {
             let session = AVAudioSession.sharedInstance()
-            // `.playback` + `.mixWithOthers` → plays even when the ring switch
-            // is on silent, and doesn't duck other audio (Music etc.).
             try session.setCategory(.playback,
                                     mode: .default,
                                     options: [.mixWithOthers])
@@ -41,19 +53,29 @@ final class PaperSound {
             print("PaperSound session error:", error)
         }
 
+        rustleFile = loadBundledPlayer(base: SoundFiles.paperRustleBase)
+        trashLidFile = loadBundledPlayer(base: SoundFiles.trashLidBase)
+
+        rustleFile?.prepareToPlay()
+        trashLidFile?.prepareToPlay()
+
         let fmt = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 1)!
-        engine.attach(rustleNode)
-        engine.attach(crumpleNode)
-        engine.connect(rustleNode,  to: engine.mainMixerNode, format: fmt)
-        engine.connect(crumpleNode, to: engine.mainMixerNode, format: fmt)
+        if rustleFile == nil {
+            engine.attach(rustleNode)
+            engine.connect(rustleNode, to: engine.mainMixerNode, format: fmt)
+            rustleBuffer = makeRustleBuffer(duration: 0.32, format: fmt)
+        }
+        if trashLidFile == nil {
+            engine.attach(crumpleNode)
+            engine.connect(crumpleNode, to: engine.mainMixerNode, format: fmt)
+            crumpleBuffer = makeCrumpleBuffer(duration: 0.30, format: fmt)
+        }
 
-        rustleBuffer  = makeRustleBuffer(duration: 0.32, format: fmt)
-        crumpleBuffer = makeCrumpleBuffer(duration: 0.30, format: fmt)
-
+        guard rustleBuffer != nil || crumpleBuffer != nil else { return }
         do {
             try engine.start()
-            rustleNode.play()
-            crumpleNode.play()
+            if rustleBuffer != nil { rustleNode.play() }
+            if crumpleBuffer != nil { crumpleNode.play() }
         } catch {
             print("PaperSound engine start error:", error)
         }
@@ -67,32 +89,53 @@ final class PaperSound {
         if type == .ended {
             try? AVAudioSession.sharedInstance().setActive(true)
             try? engine.start()
-            rustleNode.play()
-            crumpleNode.play()
+            if rustleBuffer != nil { rustleNode.play() }
+            if crumpleBuffer != nil { crumpleNode.play() }
         }
     }
 
-    /// Dry paper slide — for unread / archive exits.
+    private func loadBundledPlayer(base: String) -> AVAudioPlayer? {
+        for ext in SoundFiles.tryExtensions {
+            guard let url = Bundle.main.url(forResource: base, withExtension: ext) else { continue }
+            if let p = try? AVAudioPlayer(contentsOf: url) {
+                p.numberOfLoops = 0
+                return p
+            }
+        }
+        return nil
+    }
+
+    /// Paper rustle — Unread and Archive.
     func rustle(volume: Float = 0.75) {
-        if !engine.isRunning { try? engine.start() }
+        if rustleBuffer != nil, !engine.isRunning { try? engine.start() }
+        if let p = rustleFile {
+            p.volume = volume
+            p.currentTime = 0
+            p.play()
+            return
+        }
         guard let buf = rustleBuffer else { return }
         rustleNode.volume = volume
         if !rustleNode.isPlaying { rustleNode.play() }
         rustleNode.scheduleBuffer(buf, at: nil, options: .interrupts, completionHandler: nil)
     }
 
-    /// Soft paper-dismiss — for trash. iOS does not offer a public “move to
-    /// trash” audio API; this is a low, muffled scrunch (not the old burst
-    /// noise, which read like a gunshot).
-    func crumple(volume: Float = 0.38) {
-        if !engine.isRunning { try? engine.start() }
+    /// Trash-can lid — `completeTrash` (replaces procedural crumple when the MP3 is in the bundle).
+    func crumple(volume: Float = 0.75) {
+        if crumpleBuffer != nil, !engine.isRunning { try? engine.start() }
+        if let p = trashLidFile {
+            p.volume = volume
+            p.currentTime = 0
+            p.play()
+            return
+        }
         guard let buf = crumpleBuffer else { return }
         crumpleNode.volume = volume
         if !crumpleNode.isPlaying { crumpleNode.play() }
         crumpleNode.scheduleBuffer(buf, at: nil, options: .interrupts, completionHandler: nil)
     }
 
-    // MARK: - Synthesis
+    // MARK: - Synthesis (fallback when no file in bundle)
 
     private func makeRustleBuffer(duration: Double, format: AVAudioFormat) -> AVAudioPCMBuffer? {
         let frameCount = AVAudioFrameCount(duration * format.sampleRate)
@@ -124,19 +167,26 @@ final class PaperSound {
 
         var lp: Float = 0
         var lp2: Float = 0
+        var smooth: Float = 0
         for i in 0..<Int(frameCount) {
             let t = Float(i) / max(1, Float(frameCount - 1))
-            // Smooth attack / decay — no sudden transients.
-            let attack = min(1, t / 0.05)
-            let decay = (t < 0.55) ? 1 : max(0, 1 - (t - 0.55) / 0.45)
+            let attack = min(1, t / 0.035)
+            let decay = (t < 0.5) ? 1 : max(0, 1 - (t - 0.5) / 0.5)
             let env = attack * decay
 
             let n = Float.random(in: -1...1)
-            lp = lp * 0.88 + n * 0.12
-            lp2 = lp2 * 0.72 + lp * 0.28
-            // Low-mid band only (removes harsh high crackle).
-            let body = lp2 * 0.95
-            data[i] = body * env * 0.42
+            lp = lp * 0.86 + n * 0.14
+            lp2 = lp2 * 0.70 + lp * 0.30
+            let body = lp2
+
+            smooth = smooth * 0.97 + n * 0.03
+            let hf = n - smooth
+            let crinkle = min(abs(hf), 0.5) * 0.7
+
+            let wobbleA = 0.78 + 0.22 * sin(2 * Float.pi * 3.0 * t)
+            let wobbleB = 0.86 + 0.14 * sin(2 * Float.pi * 14.5 * t + 0.7)
+            let mix = (body * 0.78 + crinkle * 0.22) * wobbleA * wobbleB
+            data[i] = mix * env * 0.52
         }
         return buf
     }
